@@ -2,10 +2,18 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+// 1. Include 'path' package
+var path = require('path');
 
 var app = module.exports = loopback();
 
 app.start = function() {
+  // 2. Get the FQPN of the index file in client
+  var staticFolder = path.dirname(
+    path.resolve(__dirname, '..', app.get('indexFile'))
+  );
+  // 3. Set staticFolder as static in the server
+  app.use(loopback.static(staticFolder));
   // start the web server
   return app.listen(function() {
     app.emit('started');
